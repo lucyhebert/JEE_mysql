@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,14 +81,17 @@ public class Controller {
         jdbcTemplate.update("insert into tweets(auteur, contenu) values(?, ?)", auteur, contenu);
     }
 
-    @RequestMapping("/auteurs")
+    @RequestMapping("/utilisateurs")
     public List<String> getAuteurs() {
 
         return this.jdbcTemplate.query(
-                "select auteur from tweets order by date desc",
+                "select handle, inscription, prenom, nom from utilisateurs order by inscription",
                 (rs, rowNum) -> {
-                    String auteur = (rs.getString("auteur"));
-                    return auteur;
+                    String handle = (rs.getString("handle"));
+                    handle += " " + (rs.getString("inscription"));
+                    handle += " " + (rs.getString("prenom"));
+                    handle += " " + (rs.getString("nom"));
+                    return handle;
                 });
     }
 
