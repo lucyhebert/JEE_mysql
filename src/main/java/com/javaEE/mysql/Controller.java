@@ -1,6 +1,8 @@
 package com.javaEE.mysql;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,6 +95,21 @@ public class Controller {
                     handle += " " + (rs.getString("nom"));
                     return handle;
                 });
+    }
+
+    @RequestMapping(value="/retweet", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public ResponseEntity<HttpStatus> createRetweet(@RequestParam String utilisateur, @RequestParam String tweet) {
+        String auteur = jdbcTemplate.queryForObject("select auteur from tweets where id = " + tweet, String.class);
+
+        if(!utilisateur.equals(auteur)) {
+            jdbcTemplate.update("insert into retweets(tweet, utilisateur) values(?, ?)", tweet, utilisateur);
+        }
+        else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 }
