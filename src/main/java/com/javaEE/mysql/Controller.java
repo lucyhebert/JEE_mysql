@@ -72,16 +72,17 @@ public class Controller {
     }
 
     @RequestMapping("/utilisateurs")
-    public List<String> getAuteurs() {
+    public List<Utilisateur> getUtilisateurs() {
 
         return this.jdbcTemplate.query(
                 "select handle, inscription, prenom, nom from utilisateurs order by inscription",
                 (rs, rowNum) -> {
-                    String handle = (rs.getString("handle"));
-                    handle += " " + (rs.getString("inscription"));
-                    handle += " " + (rs.getString("prenom"));
-                    handle += " " + (rs.getString("nom"));
-                    return handle;
+                    Utilisateur utilisateur = new Utilisateur();
+                    utilisateur.setHandle(rs.getString("handle"));
+                    utilisateur .setInscription(rs.getTimestamp("inscription"));
+                    utilisateur.setPrenom(rs.getString("prenom"));
+                    utilisateur.setNom(rs.getString("nom"));
+                    return utilisateur;
                 });
     }
 

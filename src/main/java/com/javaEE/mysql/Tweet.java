@@ -2,7 +2,6 @@ package com.javaEE.mysql;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ public class Tweet {
     private Integer id;
     private Timestamp date;
     private String contenu;
-    private String auteur;
+    private Utilisateur auteur;
     private List<String> retweetersHandles;
 
     public Tweet() {
@@ -44,11 +43,11 @@ public class Tweet {
         this.contenu = contenu;
     }
 
-    public String getAuteur() {
+    public Utilisateur getAuteur() {
         return auteur;
     }
 
-    public void setAuteur(String auteur) {
+    public void setAuteur(Utilisateur auteur) {
         this.auteur = auteur;
     }
 }
