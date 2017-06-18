@@ -1,12 +1,16 @@
 package com.javaEE.mysql;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.sql.Timestamp;
 
 /**
  * Created by Lucy on 18/06/2017.
  */
+@Entity(name = "Utilisateurs")
 public class Utilisateur {
 
+    @Id
     private String handle;
     private Timestamp inscription;
     private String prenom;
