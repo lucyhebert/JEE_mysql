@@ -12,7 +12,7 @@ public class Tweet {
     private Integer id;
     private Timestamp date;
     private String contenu;
-    private Utilisateur auteur;
+    private String auteur;
     private List<String> retweetersHandles;
 
     public Tweet() {
@@ -43,11 +43,11 @@ public class Tweet {
         this.contenu = contenu;
     }
 
-    public Utilisateur getAuteur() {
+    public String getAuteur() {
         return auteur;
     }
 
-    public void setAuteur(Utilisateur auteur) {
+    public void setAuteur(String auteur) {
         this.auteur = auteur;
     }
 }
