@@ -18,6 +18,9 @@ public class Controller {
     @Autowired
     JdbcTemplate jdbcTemplate;
 
+    @Autowired
+    UtilisateurRepository utilisateurRepo;
+
     @RequestMapping("/count")
     public int countTweets() {
         return jdbcTemplate.queryForObject("select count(*) from tweets", Integer.class);
@@ -72,18 +75,9 @@ public class Controller {
     }
 
     @RequestMapping("/utilisateurs")
-    public List<Utilisateur> getUtilisateurs() {
+    public Iterable<Utilisateur> getUtilisateurs() {
 
-        return this.jdbcTemplate.query(
-                "select handle, inscription, prenom, nom from utilisateurs order by inscription",
-                (rs, rowNum) -> {
-                    Utilisateur utilisateur = new Utilisateur();
-                    utilisateur.setHandle(rs.getString("handle"));
-                    utilisateur .setInscription(rs.getTimestamp("inscription"));
-                    utilisateur.setPrenom(rs.getString("prenom"));
-                    utilisateur.setNom(rs.getString("nom"));
-                    return utilisateur;
-                });
+        return this.utilisateurRepo.findAll();
     }
 
     @RequestMapping(value="/retweet", method = {RequestMethod.GET, RequestMethod.POST})
