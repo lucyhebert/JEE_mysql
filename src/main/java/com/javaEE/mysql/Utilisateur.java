@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 /**
  * Created by Lucy on 18/06/2017.
  */
+
 @Entity(name = "Utilisateurs")
 public class Utilisateur {
 

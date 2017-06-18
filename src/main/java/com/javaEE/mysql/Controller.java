@@ -21,6 +21,9 @@ public class Controller {
     @Autowired
     UtilisateurRepository utilisateurRepo;
 
+    @Autowired
+    TweetRepository tweetRepo;
+
     @RequestMapping("/count")
     public int countTweets() {
         return jdbcTemplate.queryForObject("select count(*) from tweets", Integer.class);
@@ -65,18 +68,22 @@ public class Controller {
     @RequestMapping(value="/tweet", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public void createTweet(@RequestParam String auteur, @RequestParam String contenu) {
-        jdbcTemplate.update("insert into tweets(auteur, contenu) values(?, ?)", auteur, contenu);
+
+        Tweet tweet = new Tweet();
+        tweet.setAuteur(auteur);
+        tweet.setContenu(contenu);
+
+        tweetRepo.save(tweet);
     }
 
     @RequestMapping(value="/tweet/{id}")
     @ResponseBody
-    public String getTweet(@PathVariable("id") String id) {
-        return jdbcTemplate.queryForObject("select contenu from tweets where id = " + id , String.class);
+    public Tweet getTweet(@PathVariable("id") String id) {
+        return this.tweetRepo.findOne(Integer.parseInt(id));
     }
 
     @RequestMapping("/utilisateurs")
     public Iterable<Utilisateur> getUtilisateurs() {
-
         return this.utilisateurRepo.findAll();
     }
 

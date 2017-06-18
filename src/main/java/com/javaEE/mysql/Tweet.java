@@ -1,22 +1,27 @@
 package com.javaEE.mysql;
 
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by p1614402 on 24/05/2017.
  */
+
+@Entity(name = "tweets")
 public class Tweet {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private Timestamp date;
     private String contenu;
     private String auteur;
-    private List<String> retweetersHandles;
 
     public Tweet() {
-        this.retweetersHandles = new ArrayList<String>();
     }
 
     public Integer getId() {
