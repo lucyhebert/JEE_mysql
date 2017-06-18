@@ -65,6 +65,12 @@ public class Controller {
         jdbcTemplate.update("insert into tweets(auteur, contenu) values(?, ?)", auteur, contenu);
     }
 
+    @RequestMapping(value="/tweet/{id}")
+    @ResponseBody
+    public String getTweet(@PathVariable("id") String id) {
+        return jdbcTemplate.queryForObject("select contenu from tweets where id = " + id , String.class);
+    }
+
     @RequestMapping("/utilisateurs")
     public List<String> getAuteurs() {
 

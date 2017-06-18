@@ -1,7 +1,9 @@
 package com.javaEE.mysql;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by p1614402 on 24/05/2017.
@@ -12,6 +14,11 @@ public class Tweet {
     private Timestamp date;
     private String contenu;
     private String auteur;
+    private List<String> retweetersHandles;
+
+    public Tweet() {
+        this.retweetersHandles = new ArrayList<String>();
+    }
 
     public Integer getId() {
         return id;
