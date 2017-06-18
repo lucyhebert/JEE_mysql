@@ -89,11 +89,15 @@ public class Controller {
 
     @RequestMapping(value="/retweet", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    public ResponseEntity<HttpStatus> createRetweet(@RequestParam String utilisateur, @RequestParam String tweet) {
-        String auteur = jdbcTemplate.queryForObject("select auteur from tweets where id = " + tweet, String.class);
+    public ResponseEntity<HttpStatus> createRetweet(@RequestParam String utilisateurHandle, @RequestParam String tweetId) {
 
-        if(!utilisateur.equals(auteur)) {
-            jdbcTemplate.update("insert into retweets(tweet, utilisateur) values(?, ?)", tweet, utilisateur);
+        Utilisateur utilisateurRetweet = utilisateurRepo.findOne(utilisateurHandle);
+        Tweet retweet = tweetRepo.findOne(Integer.parseInt(tweetId));
+        String auteurTweet = retweet.getAuteur();
+
+        if(!utilisateurHandle.equals(auteurTweet)) {
+            retweet.getRetweeters().add(utilisateurRetweet);
+            tweetRepo.save(retweet);
         }
         else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

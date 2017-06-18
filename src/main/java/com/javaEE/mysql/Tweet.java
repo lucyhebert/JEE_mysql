@@ -1,11 +1,10 @@
 package com.javaEE.mysql;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by p1614402 on 24/05/2017.
@@ -17,9 +16,21 @@ public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+
     private Timestamp date;
+
     private String contenu;
+
     private String auteur;
+
+    @OneToMany
+    @JoinTable(
+            name="retweets",
+            joinColumns = @JoinColumn( name="tweet"),
+            inverseJoinColumns = @JoinColumn( name="utilisateur")
+    )
+    private List<Utilisateur> retweeters;
+
 
     public Tweet() {
     }
@@ -54,5 +65,13 @@ public class Tweet {
 
     public void setAuteur(String auteur) {
         this.auteur = auteur;
+    }
+
+    public List<Utilisateur> getRetweeters() {
+        return retweeters;
+    }
+
+    public void setRetweeters(List<Utilisateur> retweeters) {
+        this.retweeters = retweeters;
     }
 }
