@@ -23,57 +23,39 @@ public class Controller {
         return jdbcTemplate.queryForObject("select count(*) from tweets", Integer.class);
     }
 
-//    @RequestMapping("/list")
-//    public List<Tweet> getTweets(@RequestParam(value = "auteur", required = false) String auteur) {
-//        if(auteur != null) {
-//            return this.jdbcTemplate.query(
-//                    "select id, date, contenu, auteur from tweets where auteur =?",
-//                    (rs, rowNum) -> {
-//                        Tweet tweet = new Tweet();
-//                        tweet.setId(rs.getInt("id"));
-//                        tweet.setDate(rs.getTimestamp("date"));
-//                        tweet.setContenu(rs.getString("contenu"));
-//                        tweet.setAuteur(rs.getString("auteur"));
-//                        return tweet;
-//                    }, auteur);
-//        }
-//
-//        return this.jdbcTemplate.query(
-//                "select id, date, contenu, auteur from tweets",
-//                (rs, rowNum) -> {
-//                    Tweet tweet = new Tweet();
-//                    tweet.setId(rs.getInt("id"));
-//                    tweet.setDate(rs.getTimestamp("date"));
-//                    tweet.setContenu(rs.getString("contenu"));
-//                    tweet.setAuteur(rs.getString("auteur"));
-//                    return tweet;
-//                });
-//    }
-
     @RequestMapping("/list")
-    public List<Tweet> getTweets(@RequestParam(value = "auteur", required = false) String auteur) {
+    public List<String> getTweets(@RequestParam(value = "auteur", required = false) String auteur) {
         if(auteur != null) {
+
             return this.jdbcTemplate.query(
-                    "select id, date, contenu, auteur from tweets where auteur =? order by date desc",
+                    "select r.tweet, t.date, t.contenu, t.auteur, count(r.utilisateur) from retweets r " +
+                            "join tweets t on r.tweet = t.id where auteur =? group by tweet",
                     (rs, rowNum) -> {
                         Tweet tweet = new Tweet();
-                        tweet.setId(rs.getInt("id"));
-                        tweet.setDate(rs.getTimestamp("date"));
-                        tweet.setContenu(rs.getString("contenu"));
-                        tweet.setAuteur(rs.getString("auteur"));
-                        return tweet;
+                        tweet.setId(rs.getInt("r.tweet"));
+                        tweet.setDate(rs.getTimestamp("t.date"));
+                        tweet.setContenu(rs.getString("t.contenu"));
+                        tweet.setAuteur(rs.getString("t.auteur"));
+
+                        String result = " Tweet n° " + tweet.getId() +
+                                " : " + rs.getInt("count(r.utilisateur)") + " retweet(s)" ;
+                        return result;
                     }, auteur);
         }
 
         return this.jdbcTemplate.query(
-                "select id, date, contenu, auteur from tweets order by date desc",
+                "select r.tweet, t.date, t.contenu, t.auteur, count(r.utilisateur) from retweets r " +
+                        "join tweets t on r.tweet = t.id group by tweet;",
                 (rs, rowNum) -> {
                     Tweet tweet = new Tweet();
-                    tweet.setId(rs.getInt("id"));
-                    tweet.setDate(rs.getTimestamp("date"));
-                    tweet.setContenu(rs.getString("contenu"));
-                    tweet.setAuteur(rs.getString("auteur"));
-                    return tweet;
+                    tweet.setId(rs.getInt("r.tweet"));
+                    tweet.setDate(rs.getTimestamp("t.date"));
+                    tweet.setContenu(rs.getString("t.contenu"));
+                    tweet.setAuteur(rs.getString("t.auteur"));
+
+                    String result = " Tweet n° " + tweet.getId() +
+                            " : " + rs.getInt("count(r.utilisateur)") + " retweet(s)" ;
+                    return result;
                 });
     }
 
